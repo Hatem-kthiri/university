@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 4,
   },
+
   avatar: {
     type: String,
     default: image,
@@ -26,7 +27,7 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
     trim: true,
   },
-  bio: {
+  Number: {
     type: String,
     default: "Hello There!",
     minlength: 2,
