@@ -3,6 +3,7 @@ const router = express.Router();
 const Course = require("../models/Course");
 const isAuth = require("../middlewares/auth");
 const absence = require("../models/absence");
+const Note = require("../models/Notes");
 // Create a Course
 router.post("/courses", async (req, res) => {
   try {
@@ -92,4 +93,68 @@ router.post("/absences/multi", isAuth, async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// Create a note
+router.post("/Notes", async (req, res) => {
+  try {
+    const note = await Note.create(req.body);
+    res.status(201).json(note);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+
+// Get a single note by ID
+router.get("/Notes/:id", async (req, res) => {
+  try {
+    const note = await Note.findById(req.params.id);
+    if (!note) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+    res.json(note);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update a note
+router.put("/Notes/:id", async (req, res) => {
+  try {
+    const note = await Note.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!note) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+    res.json(note);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Delete a note
+router.delete("/Notes/:id", async (req, res) => {
+  try {
+    const note = await Note.findByIdAndDelete(req.params.id);
+    if (!note) {
+      return res.status(404).json({ error: "Note not found" });
+    }
+    res.json({ message: "Note deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get notes by professor
+router.get("/Notes/prof/:profId", async (req, res) => {
+  const { profId } = req.params;
+
+  try {
+    const notes = await Note.find({ addedBy: profId });
+    res.json(notes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
