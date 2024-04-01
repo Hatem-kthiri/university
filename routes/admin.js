@@ -1,4 +1,3 @@
-
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
@@ -6,7 +5,8 @@ const jwt = require("jsonwebtoken");
 const isAuth = require("../middlewares/auth");
 const Group = require("../models/groups");
 const Absence = require("../models/absence");
-const User = require("../models/user")
+const User = require("../models/user");
+const Note = require("../models/Notes");
 require("dotenv").config();
 
 // Add student
@@ -21,7 +21,7 @@ router.post("/admin/students/add", isAuth, async (req, res) => {
       groups,
       address,
       phoneNumber,
-      role
+      role,
     } = req.body;
     const student = await User.create({
       firstName,
@@ -31,7 +31,7 @@ router.post("/admin/students/add", isAuth, async (req, res) => {
       groups,
       address,
       phoneNumber,
-      role
+      role,
     });
     res.status(201).json({
       status: true,
@@ -56,7 +56,7 @@ router.post("/admin/professors/add", isAuth, async (req, res) => {
       address,
       phoneNumber,
       classToTeach,
-      role
+      role,
     } = req.body;
     const professor = await User.create({
       firstName,
@@ -66,7 +66,7 @@ router.post("/admin/professors/add", isAuth, async (req, res) => {
       address,
       phoneNumber,
       classToTeach,
-      role
+      role,
     });
     res.status(201).json({
       status: true,
@@ -197,4 +197,14 @@ router.delete("/groups/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// Get all notes
+router.get("/Notes", isAuth, async (req, res) => {
+  try {
+    const notes = await Note.find({ addedBy: req.user._id });
+    res.json(notes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = router;
