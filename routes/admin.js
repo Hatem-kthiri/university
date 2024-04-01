@@ -3,23 +3,40 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const isAuth = require("../middlewares/auth");
-const Admin = require("../models/admin");
-const Student = require("../models/student");
-const Professor = require("../models/professor");
-const Class = require("../models/class");
-const Grade = require("../models/grade");
+const Group = require("../models/groups");
 const Absence = require("../models/absence");
+const User = require("../models/user")
 require("dotenv").config();
-
-
 
 // Add student
 router.post("/admin/students/add", isAuth, async (req, res) => {
   // Add logic to check if the logged in user is an admin
   try {
-    const { name, age, grade } = req.body;
-    const student = await Student.create({ name, age, grade });
-    res.status(201).json({ status: true, message: "Student added successfully", data: student });
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      groups,
+      address,
+      phoneNumber,
+      role
+    } = req.body;
+    const student = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      groups,
+      address,
+      phoneNumber,
+      role
+    });
+    res.status(201).json({
+      status: true,
+      message: "Student added successfully",
+      data: student,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ status: false, message: "Internal Server Error" });
@@ -30,9 +47,31 @@ router.post("/admin/students/add", isAuth, async (req, res) => {
 router.post("/admin/professors/add", isAuth, async (req, res) => {
   // Add logic to check if the logged in user is an admin
   try {
-    const { name, subject } = req.body;
-    const professor = await Professor.create({ name, subject });
-    res.status(201).json({ status: true, message: "Professor added successfully", data: professor });
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      address,
+      phoneNumber,
+      classToTeach,
+      role
+    } = req.body;
+    const professor = await User.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      address,
+      phoneNumber,
+      classToTeach,
+      role
+    });
+    res.status(201).json({
+      status: true,
+      message: "Professor added successfully",
+      data: professor,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ status: false, message: "Internal Server Error" });
@@ -40,33 +79,45 @@ router.post("/admin/professors/add", isAuth, async (req, res) => {
 });
 
 // Update class for professor
-router.put("/admin/professors/:professorId/classes/update", isAuth, async (req, res) => {
-  // Add logic to check if the logged in user is an admin
-  try {
-    const { professorId } = req.params;
-    const { classId } = req.body;
-    const professor = await Professor.findByIdAndUpdate(
-      professorId,
-      { $addToSet: { classes: classId } },
-      { new: true }
-    );
-    res.status(200).json({ status: true, message: "Professor class updated successfully", data: professor });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: false, message: "Internal Server Error" });
+router.put(
+  "/admin/professors/:professorId/classes/update",
+  isAuth,
+  async (req, res) => {
+    // Add logic to check if the logged in user is an admin
+    try {
+      const { professorId } = req.params;
+      const { classId } = req.body;
+      const professor = await User.findByIdAndUpdate(
+        professorId,
+        { $addToSet: { classToTeach: classId } },
+        { new: true }
+      );
+      res.status(200).json({
+        status: true,
+        message: "Professor class updated successfully",
+        data: professor,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ status: false, message: "Internal Server Error" });
+    }
   }
-});
+);
 
 // Add class to students
 router.put("/admin/students/classes/add", isAuth, async (req, res) => {
   // Add logic to check if the logged in user is an admin
   try {
     const { classId, studentIds } = req.body;
-    const students = await Student.updateMany(
+    const students = await User.updateMany(
       { _id: { $in: studentIds } },
       { $addToSet: { classes: classId } }
     );
-    res.status(200).json({ status: true, message: "Classes added to students successfully", data: students });
+    res.status(200).json({
+      status: true,
+      message: "Classes added to students successfully",
+      data: students,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ status: false, message: "Internal Server Error" });
@@ -77,13 +128,72 @@ router.put("/admin/students/classes/add", isAuth, async (req, res) => {
 router.get("/admin/students/grades-and-absences", isAuth, async (req, res) => {
   // Add logic to check if the logged in user is an admin
   try {
-    const grades = await Grade.find().populate("student");
     const absences = await Absence.find().populate("student");
-    res.status(200).json({ status: true, grades, absences });
+    res.status(200).json({ status: true, absences });
   } catch (error) {
     console.error(error);
     res.status(500).json({ status: false, message: "Internal Server Error" });
   }
 });
 
+// Create a group
+router.post("/groups", async (req, res) => {
+  try {
+    const group = await Group.create(req.body);
+    res.status(201).json(group);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Get all groups
+router.get("/groups", async (req, res) => {
+  try {
+    const groups = await Group.find();
+    res.json(groups);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get a single group by ID
+router.get("/groups/:id", async (req, res) => {
+  try {
+    const group = await Group.findById(req.params.id);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+    res.json(group);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Update a group
+router.put("/groups/:id", async (req, res) => {
+  try {
+    const group = await Group.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+    res.json(group);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+// Delete a group
+router.delete("/groups/:id", async (req, res) => {
+  try {
+    const group = await Group.findByIdAndDelete(req.params.id);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+    res.json({ message: "Group deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = router;
