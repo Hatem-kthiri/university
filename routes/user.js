@@ -29,26 +29,44 @@ const upload = multer({ storage: storage });
 
 router.post("/register", async (req, res) => {
   try {
-    const { userName, email, password } = req.body;
-    bcrypt.hash(password, 12, async (err, hash) => {
-      if (err) {
-        res.status(500).json({ status: false, message: err });
-      } else if (hash) {
-        const user = await User.create({
-          userName,
-          email,
-          password: hash,
-        });
-        res.status(201).json({
-          status: true,
-          message: "user created",
-          data: user,
-        });
-      }
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      role,
+      address,
+      phoneNumber,
+      groups,
+      classToTeach,
+    } = req.body;
+
+    // Check if the email is already registered
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email is already registered" });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    // Create the user
+    const user = await User.create({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      role,
+      address,
+      phoneNumber,
+      groups,
+      classToTeach,
     });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ status: false, message: err });
+
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 

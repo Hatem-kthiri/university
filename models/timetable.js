@@ -1,42 +1,96 @@
-// const mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-// const calendrierSchema = new mongoose.Schema({
-
-//       time: {
-//         type: Number,
-//         required: true,
-//       },
-//       hour: {
-//         type: Number,
-//         min: 0,
-//       },
-//       Event: {
-//         type: [String],
-
-// });
-// const calendrier = mongoose.model("Calendrier", calendrierSchema);
-// module.exports = calendrier;
-// const mongoose = require("mongoose");
-
-// const calendrierSchema = new mongoose.Schema({
-//     days of the week:{
-//       type:String,
-//       required: true ,
-//     }
-
-//       start_date: {
-//         type: Number,
-//         required: true,
-//       },
-//       end_date : {
-//         type: Number,
-//         min: 0,
-//       },
-
-//       Event: {
-//         type: [String],
-//       },
-
-// });
-// const calendrier = mongoose.model("Calendrier", calendrierSchema);
-// module.exports = calendrier;
+const timeTableSchema = new mongoose.Schema({
+  groups: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "groups",
+  },
+  timeLine: {
+    monday: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId,
+      },
+      type: [
+        {
+          startTime: { type: String,  }, // Start time of class
+          endTime: { type: String,  }, // End time of class
+          classroom: { type: String, required: true },
+          professorName: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        },
+      ],
+    },
+    tuesday: {
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId,
+      },
+      type: [
+        {
+          startTime: { type: String,  },
+          endTime: { type: String,  },
+          classroom: { type: String, required: true },
+          professorName: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        },
+      ],
+    },
+    wednesday: {
+      type: [
+        {
+          startTime: { type: String,  },
+          endTime: { type: String,  },
+          classroom: { type: String, required: true },
+          professorName: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        },
+      ],
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId,
+      },
+    },
+    thursday: {
+      type: [
+        {
+          startTime: { type: String,  },
+          endTime: { type: String,  },
+          classroom: { type: String, required: true },
+          professorName: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        },
+      ],
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId,
+      },
+    },
+    friday: {
+      type: [
+        {
+          startTime: { type: String,  },
+          endTime: { type: String,  },
+          classroom: { type: String, required: true },
+          professorName: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        },
+      ],
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId,
+      },
+    },
+    saturday: {
+      type: [
+        {
+          startTime: { type: String,  },
+          endTime: { type: String,  },
+          classroom: { type: String, required: true },
+          professorName: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+        },
+      ],
+      _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: mongoose.Types.ObjectId,
+      },
+    },
+  },
+});
+const timeTable = mongoose.model("timeTable", timeTableSchema);
+module.exports = timeTable;
