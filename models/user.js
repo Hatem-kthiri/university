@@ -23,9 +23,7 @@ const userSchema = new mongoose.Schema({
   groups: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
-    required: function () {
-      return this.role == "student";
-    },
+ 
   },
   role: {
     type: String,
