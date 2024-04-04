@@ -6,6 +6,8 @@ import { PrivateRoute } from "./utils/ProtectedRoute";
 import { PublicRoute } from "./utils/PublicRoute";
 
 import { useSelector } from "react-redux";
+import NavBar from "./Components/NavBar/NavBar";
+import DashboardAdmin from "./Pages/Admin/DashboardAdmin";
 
 function App() {
   const { user } = useSelector((state) => state.LoginReducer);
@@ -18,6 +20,14 @@ function App() {
           element={
             <PublicRoute user={user}>
               <Login />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/dashboard-admin"
+          element={
+            <PublicRoute user={user}>
+              <DashboardAdmin />
             </PublicRoute>
           }
         />

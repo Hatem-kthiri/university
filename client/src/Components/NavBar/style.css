@@ -1,0 +1,8 @@
+.navbar {
+  background-color: #039be5;
+  color: #fff;
+}
+.content {
+  margin-left: 250px; /* Même largeur que le sidebar */
+  padding: 20px;
+}

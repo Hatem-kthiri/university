@@ -17,8 +17,7 @@ const noteSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  
 });
 
 const note = mongoose.model("note", noteSchema);
-module.exports = Cours;
+module.exports = note;
