@@ -8,7 +8,31 @@ const Absence = require("../models/absence");
 const User = require("../models/user");
 const Note = require("../models/Notes");
 require("dotenv").config();
-
+router.post("/register", async (req, res) => {
+  try {
+    const { email, password, role } = req.body;
+    bcrypt.hash(password, 12, async (err, hash) => {
+      if (err) {
+        res.status(500).json({ status: false, message: err });
+      } else if (hash) {
+        const admin = await User.create({
+          firstName:"admin",
+          email,
+          password: hash,
+          role: "admin",
+        });
+        res.status(201).json({
+          status: true,
+          message: "Admin Created ",
+          data: admin,
+        });
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ status: false, message: err });
+  }
+});
 // Add student
 router.post("/admin/students/add", isAuth, async (req, res) => {
   // Add logic to check if the logged in user is an admin

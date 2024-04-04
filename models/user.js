@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required:true
+    required: true,
   },
   lastName: {
     type: String,
@@ -23,7 +23,6 @@ const userSchema = new mongoose.Schema({
   groups: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
- 
   },
   role: {
     type: String,
@@ -61,12 +60,7 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
-  listofabscences:[
-    {
-       
-    }
-  ]
-
+  listofabscences: [{}],
 });
 
 module.exports = mongoose.model("User", userSchema);
