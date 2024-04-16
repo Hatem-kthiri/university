@@ -22,5 +22,5 @@ const NavBar = () => {
 
   );
 };
-
+<button type="button" class="btn btn-raised btn-primary btn-block m-t-0" data-toggle="modal" href="#cal-new-event" fdprocessedid="v39k2f"> <i class="zmdi zmdi-plus"></i> Events</button>
 export default NavBar;

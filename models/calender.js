@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const calendrierSchema = new mongoose.Schema({
+const calenderSchema = new mongoose.Schema({
   addedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",
@@ -26,5 +26,5 @@ const calendrierSchema = new mongoose.Schema({
     type: Date,
   },
 });
-const calendrier = mongoose.model("Calendrier", calendrierSchema);
-module.exports = calendrier;
+const calender = mongoose.model("Calendrier", calendrierSchema);
+module.exports = calender;

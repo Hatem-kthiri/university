@@ -149,8 +149,8 @@ router.put("/admin/students/classes/add", isAuth, async (req, res) => {
   }
 });
 
-// Get all grades and absences of students
-router.get("/admin/students/grades-and-absences", isAuth, async (req, res) => {
+// Get  absences of students
+router.get("/admin/students/Absences", isAuth, async (req, res) => {
   // Add logic to check if the logged in user is an admin
   try {
     const absences = await Absence.find().populate("student");

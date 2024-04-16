@@ -6,6 +6,8 @@ import { Route, Routes } from "react-router-dom";
 import { PublicRoute } from "./utils/PublicRoute";
 import ProfList from "./Pages/ProfList/ProfList";
 import { useSelector } from "react-redux";
+import NavBar from "./Components/NavBar/NavBar";
+import DashboardAdmin from "./Pages/Admin/DashbordAdmin/DashboardAdmin";
 //import NavBar from "./Components/NavBar/NavBar";
 import DashboardAdmin from "./Pages/Admin/DashboardAdmin";
 import StudentList from "./Pages/StudentList/StudentList";
