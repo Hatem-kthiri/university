@@ -7,7 +7,7 @@ import { PublicRoute } from "./utils/PublicRoute";
 
 import { useSelector } from "react-redux";
 import NavBar from "./Components/NavBar/NavBar";
-import DashboardAdmin from "./Pages/Admin/DashboardAdmin";
+import DashboardAdmin from "./Pages/Admin/DashbordAdmin/DashboardAdmin";
 
 function App() {
   const { user } = useSelector((state) => state.LoginReducer);
