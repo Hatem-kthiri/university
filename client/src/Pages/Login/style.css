@@ -8,7 +8,7 @@
   min-height: 100vh;
 }
 .login-right {
-  background-color: #039be5;
+  background-color: #CD295A;
   width: 42%;
   display: flex;
   flex-direction: column;
@@ -37,7 +37,7 @@
   color: #fff;
 }
 .button.bg-primary {
-  background-color: #039be5 !important;
+  background-color: #CD295A!important;
   border: none;
 }
 .button {
@@ -87,7 +87,7 @@
   transition: all 0.3s;
   /* border: 1px solid gray; */
   margin-left: 5px;
-  background-color: #4a4a4a;
+  background-color: #979393;
 }
 .login_left .profile img {
   width: 40px;
@@ -99,7 +99,7 @@
   color: #fff;
 }
 .login_left .profile.active {
-  background-color: #039be5;
+  background-color: #CD295A;
 }
 .login_left .form {
   margin-top: 30px;
