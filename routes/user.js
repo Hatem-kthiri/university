@@ -72,8 +72,13 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
     const findUser = await User.findOne({ email: email });
+    if (findUser.role.toLowerCase() !== role.toLowerCase()) {
+      return res
+        .status(401)
+        .json({ message: `this email does not exist for ${role} type` });
+    }
     if (findUser) {
       bcrypt.compare(password, findUser.password).then(function (result) {
         if (result == true) {
@@ -110,9 +115,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.get("/current", isAuth, (req, res) => {
+router.get("/current", isAuth, async (req, res) => {
   if (req.user) {
-    res.send({ status: true, msg: "authorized", user: req.user });
+    const findUser = await User.findById(req.user._id).select(
+      "email fullName role"
+    );
+    res.send({ status: true, msg: "authorized", user: findUser });
   } else {
     res.send({ status: false, msg: "unauthorised" });
   }

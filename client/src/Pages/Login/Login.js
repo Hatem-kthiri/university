@@ -14,18 +14,6 @@ const Login = () => {
   const { loading, isAuth, role, error } = useSelector(
     (state) => state.LoginReducer
   );
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     /* eslint-disable-next-line*/
-  //     if (isAuth && role == 1) {
-  //       navigate("/dashboard-instructor");
-  //       /* eslint-disable-next-line*/
-  //     } else if (isAuth && role == 2) {
-  //       navigate("/dashboard-student");
-  //     }
-  //   }, 2000);
-  //   /* eslint-disable-next-line*/
-  // }, [isAuth]);
 
   const dispatch = useDispatch();
   const [loginDetails, setLoginDetails] = useState({
@@ -43,12 +31,17 @@ const Login = () => {
       errorToast("Email Not Valid");
     }
     e.preventDefault();
-    dispatch(login({ loginDetails, navigate }));
+    dispatch(
+      login({
+        loginDetails: {
+          ...loginDetails,
+          role: profile.find((el) => el.active === true).name,
+        },
+        navigate,
+      })
+    );
   };
 
-  useEffect(() => {
-    errorToast(error);
-  }, [error]);
   const [profile, setProfile] = useState([
     {
       id: 1,
@@ -103,7 +96,9 @@ const Login = () => {
               <input
                 className="input is-large"
                 type="email"
+                name="email"
                 placeholder="Email"
+                onChange={handleChange}
               />
               <span className="icon is-left">
                 <i className="fa-regular fa-user" />
@@ -112,8 +107,10 @@ const Login = () => {
             <div className="control has-icons-left">
               <input
                 className="input is-large"
+                name="password"
                 type="password"
                 placeholder="Password"
+                onChange={handleChange}
               />
               <span className="icon is-left">
                 <i className="fa-regular fa-lock" />
@@ -132,7 +129,9 @@ const Login = () => {
                 </p>
               </div>
             </div>
-            <button className="button bg-primary m-auto">Log in</button>
+            <button className="button bg-primary m-auto" onClick={handleSubmit}>
+              Log in
+            </button>
           </div>
         </div>
       </div>

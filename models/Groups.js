@@ -6,6 +6,10 @@ const groupsSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  groupRoutine: {
+    type: String,
+    required: true,
+  },
 });
 
 const groups = mongoose.model("groups", groupsSchema);

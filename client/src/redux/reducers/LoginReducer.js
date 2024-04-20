@@ -18,7 +18,7 @@ const LoginReducer = (state = initialState, action) => {
   const { type, payload } = action;
   switch (type) {
     case LOGIN_USER:
-      localStorage.setItem("accessToken", payload.token);
+      localStorage.setItem("accessToken", payload);
       return {
         ...state,
         loading: true,
@@ -30,8 +30,9 @@ const LoginReducer = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        user: payload.data,
+        user: payload.user,
         userLoading: false,
+        isAuth: true,
       };
     case LOADING:
       return {

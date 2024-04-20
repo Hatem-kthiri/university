@@ -1,0 +1,9 @@
+.react-calendar {
+  border: none !important;
+  padding: 20px;
+}
+.bg-m-white {
+  background: #fff;
+  box-shadow: 0px 0px 1px 0px gray;
+  padding: 20px;
+}
